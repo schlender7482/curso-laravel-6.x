@@ -27,9 +27,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $teste = 12345;
+        $produtos = ['TV', 'Geladeira', 'Mesa', 'Sofá'];
 
-        return view('admin.pages.products.index', compact('teste'));
+        return view('admin.pages.products.index', compact('produtos'));
     }
 
     /**
@@ -39,7 +39,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.pages.products.create');
     }
 
     /**
@@ -50,7 +50,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd('teste..');
     }
 
     /**
@@ -72,7 +72,7 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('admin.pages.products.edit', compact('id'));
     }
 
     /**
@@ -84,7 +84,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        dd("Editando o produto: {$id}");
     }
 
     /**
