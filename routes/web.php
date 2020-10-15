@@ -104,5 +104,7 @@ Route::group([
     Route::delete('/products/{id}', 'ProductController@destroy')->name('products.destroy');
 */
 //ou para resumir todos as rotas padrões de cima em apenas uma linha, apenas uma linha emplementa todos os métodos a cima.
-Route::resource('products', 'ProductController'); //->middleware('auth'); <- Para adicionar o middleware a todos os métodos.
+Route::resource('products', 'ProductController')->middleware(['auth', 'check.is.admin']); //<- Para adicionar o middleware a todos os métodos.
 Route::get('products/search', 'ProductController@search')->name('products.search');
+
+Auth::routes(['register' => false]);
