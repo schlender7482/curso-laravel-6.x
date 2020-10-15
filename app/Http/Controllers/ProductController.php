@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreUpdateProducts;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -31,7 +32,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = $this->repository->orderBy('id', 'desc')->paginate();
+        $products = $this->repository->search(request()->get('filter'));
 
         return view('admin.pages.products.index', [
             'products' => $products
@@ -84,6 +85,10 @@ class ProductController extends Controller
         //}
 
         $data = $request->only(['name', 'description', 'price']);
+
+        if ($request->hasFile('image') && $request->image->isValid()) {
+            $data['image'] = $request->image->store('products');
+        }
 
         $this->repository->create($data);
 
@@ -139,7 +144,16 @@ class ProductController extends Controller
         if (!$product = $this->repository->find($id)) {
             return redirect()->back();
         }
-        $product->update($request->all());
+        $data = $request->only(['name', 'description', 'price']);
+
+        if ($request->hasFile('image') && $request->image->isValid()) {
+            if ($product->image && Storage::exists($product->image)) {
+                Storage::delete($product->image);
+            }
+            $data['image'] = $request->image->store('products');
+        }
+
+        $product->update($data);
 
         return redirect()->route('products.index');
     }
@@ -154,6 +168,9 @@ class ProductController extends Controller
     {
         if (!$product = $this->repository->find($id)) {
             return redirect()->back();
+        }
+        if ($product->image && Storage::exists($product->image)) {
+            Storage::delete($product->image);
         }
         $product->delete();
 

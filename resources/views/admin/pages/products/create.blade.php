@@ -5,7 +5,7 @@
 @section('content')
     <h2>Cadatrar novo Produto.</h2>
 
-    <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
+    <form class="form" action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         @include('admin.pages.products.partials.form')
     </form>
